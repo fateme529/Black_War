@@ -1,19 +1,29 @@
 #pragma once
 #include <iostream>
+#include <cstdlib>
+#include <iomanip>
+#include <exception>
+#include <cctype>
+#include <time.h>
+#include <conio.h>
+
 #include "heli.hpp"
+#include "shoot.hpp"
 using namespace std;
 
 #define row 9
 #define column 12
 
-class App
+class App :public helicopter
 {
 private:
     int speed = 350;
     unsigned int point = 0;
     
+    
 public:
-    helicopter helicopter;
+    shoot s;
+    helicopter h;
     App();
     void welcome() const;
     void help() const;
@@ -24,6 +34,7 @@ public:
     void runGame();
     void createBoard(string board[][column]);
     void printBoard(string board[][column]);
+    bool checkStatus(string board[][column], int OX);
 };
 
 

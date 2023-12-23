@@ -149,28 +149,57 @@ void App::runGame()
     string board[row][column];
     createBoard(board);
     printBoard(board);
-    board[helicopter.ox][column-1] = " > ";
+    board[ox][column-12] = " > ";
 
-    /*while (1)
+     while (1)
     {
-        int random = frog.generateRandom();
+       // int random = s.generateRandom();
 
-        for (int i = 0; i < row; i++)
+        for (int i = 0; i < column; i++)
         {
-
+            
             if (_kbhit())
             {
                 char ch = _getch();
-                snake.snakeStatus(ch, board);
+                h.heli_Status(ch, board);
+                
+           
+          if(ch == 'w') 
+            {
+                   s.shootStatus(ox, board,i); // i == down
             }
 
-            frog.frogStatus(random, board,i); // i == down
-            if (checkStatus(board, snake.ox))
-            {
-                i += 2;
-            };
-
+            }
+           
+           
             printBoard(board);
         }
-    }*/
+    }
+}
+
+
+// -------------------------------------------------------
+bool App::checkStatus(string board[][column], int OX)
+{
+
+    if (board[row - 1][OX] == " ^ " && board[row - 2][OX] == " * ")
+    {
+
+        board[row - 2][OX] = "   "; // injori on * pake mishe
+        return true;
+    }
+    else
+    {
+        for (size_t i = 0; i < column; i++)
+        {
+            if (board[row - 1][i] == " * ") // mige age be row ==0  resid
+            {
+
+                board[row - 2][i] == "   ";
+                printBoard(board);
+                cout << "GAME OVER" << endl;
+                exit(0);
+            }
+        }
+    }
 }
