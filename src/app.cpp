@@ -153,6 +153,8 @@ void App::runGame()
     int C = -1;
     while (1)
     {
+        int random = e.generateRandom();
+        int c = 11;
 
         if (_kbhit())
         {
@@ -177,9 +179,10 @@ void App::runGame()
 
                 for (int i = 1; i < column; i++)
                 {
+                    
                     s.shootStatus(O, board, i);
-
-                    if (_kbhit())
+                     e.enemyStatus(random, board, c);
+                    if (_kbhit()) 
                     {
                         switch (getch())
                         {
@@ -193,8 +196,14 @@ void App::runGame()
                         default:
                             break;
                         }
+                        
+                    
+
                     }
+                    
+                    
                     printBoard(board, 50);
+                    --c;
                 }
 
                 break;
@@ -209,27 +218,5 @@ void App::runGame()
 }
 
 // -------------------------------------------------------
-bool App::checkStatus(string board[][column], int OX)
-{
 
-    if (board[row - 1][OX] == " ^ " && board[row - 2][OX] == " * ")
-    {
 
-        board[row - 2][OX] = "   "; // injori on * pake mishe
-        return true;
-    }
-    else
-    {
-        for (size_t i = 0; i < column; i++)
-        {
-            if (board[row - 1][i] == " * ") // mige age be row ==0  resid
-            {
-
-                board[row - 2][i] == "   ";
-                printBoard(board, 350);
-                cout << "GAME OVER" << endl;
-                exit(0);
-            }
-        }
-    }
-}

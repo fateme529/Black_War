@@ -9,6 +9,7 @@
 
 #include "heli.hpp"
 #include "shoot.hpp"
+#include "enemy.hpp"
 using namespace std;
 
 #define row 9
@@ -24,6 +25,7 @@ private:
 public:
     shoot s;
     helicopter h;
+    enemy e;
     App();
     void welcome() const;
     void help() const;

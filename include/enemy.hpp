@@ -1,0 +1,19 @@
+#pragma once
+#include <string>
+#include <time.h>
+#include <iostream>
+
+#define row 9
+#define column 12
+
+class  enemy
+{
+private:
+    
+public:
+int generateRandom();
+void enemyStatus(int random, std::string board[][column], int left);
+    
+  
+};
+
