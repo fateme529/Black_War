@@ -30,7 +30,7 @@ void App::help() const
     cout << "[:)] "
          << "app commands : (case insensitive)" << endl;
 
-    cout << "for start game enter :  S "<< endl;
+    cout << "for start game enter :  S " << endl;
 }
 // -------------------------------------------------------
 int App::exec()
@@ -46,7 +46,7 @@ int App::exec()
 
             if (cin.eof() || command == "s")
             {
-               // runGame();
+                // runGame();
             }
             else if (command == "help")
             {
@@ -77,8 +77,6 @@ int App::exec()
             return EXIT_SUCCESS;
         }
     }
-
-    
 }
 // -------------------------------------------------------
 void App::lowercase(string &str)
@@ -108,7 +106,8 @@ void App::clear() const
 void App::delay(int ms)
 {
     clock_t start = clock();
-    while (clock() < start + ms);
+    while (clock() < start + ms)
+        ;
 }
 // -------------------------------------------------------
 void App::createBoard(string board[][column])
@@ -123,7 +122,7 @@ void App::createBoard(string board[][column])
     }
 }
 // -------------------------------------------------------
-void App::printBoard(string board[][column])
+void App::printBoard(string board[][column], int s)
 {
     system("cls");
     cout << "point : " << point << "\n"
@@ -140,43 +139,74 @@ void App::printBoard(string board[][column])
         cout << endl;
     }
     cout << "+ ---------------------------------- +" << endl;
-    delay(speed);
-    
+    delay(s);
 }
 // -------------------------------------------------------
 void App::runGame()
 {
     string board[row][column];
     createBoard(board);
-    printBoard(board);
-    board[ox][column-12] = " > ";
+    board[ox][column - 12] = " > ";
+    printBoard(board, 350);
 
-     while (1)
+    int O = ox;
+    int C = -1;
+    while (1)
     {
-       // int random = s.generateRandom();
 
-        for (int i = 0; i < column; i++)
+        if (_kbhit())
         {
-            
-            if (_kbhit())
+
+            for (int i = 0; i < row; i++)
             {
-                char ch = _getch();
-                h.heli_Status(ch, board);
-                
-           
-          if(ch == 'w') 
-            {
-                   s.shootStatus(ox, board,i); // i == down
+                if (board[i][0] == " > ")
+                {
+                    O = i;
+                }
             }
 
+            switch (getch())
+            {
+            case 'a':
+                h.heli_Status('a', board);
+                break;
+            case 'd':
+                h.heli_Status('d', board);
+                break;
+            case 'w':
+
+                for (int i = 1; i < column; i++)
+                {
+                    s.shootStatus(O, board, i);
+
+                    if (_kbhit())
+                    {
+                        switch (getch())
+                        {
+                        case 'a':
+                            h.heli_Status('a', board);
+                            break;
+                        case 'd':
+                            h.heli_Status('d', board);
+                            break;
+
+                        default:
+                            break;
+                        }
+                    }
+                    printBoard(board, 50);
+                }
+
+                break;
+
+            default:
+                break;
             }
-           
-           
-            printBoard(board);
+
+            printBoard(board, 100);
         }
     }
 }
-
 
 // -------------------------------------------------------
 bool App::checkStatus(string board[][column], int OX)
@@ -196,7 +226,7 @@ bool App::checkStatus(string board[][column], int OX)
             {
 
                 board[row - 2][i] == "   ";
-                printBoard(board);
+                printBoard(board, 350);
                 cout << "GAME OVER" << endl;
                 exit(0);
             }

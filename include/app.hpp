@@ -17,7 +17,7 @@ using namespace std;
 class App :public helicopter
 {
 private:
-    int speed = 350;
+    int speed = 500;
     unsigned int point = 0;
     
     
@@ -33,7 +33,7 @@ public:
     void delay(int ms);
     void runGame();
     void createBoard(string board[][column]);
-    void printBoard(string board[][column]);
+    void printBoard(string board[][column],int s);
     bool checkStatus(string board[][column], int OX);
 };
 
