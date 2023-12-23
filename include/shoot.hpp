@@ -7,10 +7,6 @@
 class shoot
 {
 private:
-    
-
 public:
-
-    void shootStatus(int random, std::string board[][column],int Right);
-    
+    void shootStatus(int random, std::string board[][column], int Right);
 };

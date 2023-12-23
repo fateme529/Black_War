@@ -11,7 +11,7 @@ main()
  shoot shoot;
  string board[row][column];
  app.createBoard(board);
- app.printBoard(board);
+ app.printBoard(board,500);
  app.runGame();
  
 
