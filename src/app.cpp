@@ -147,25 +147,40 @@ void App::runGame()
     string board[row][column];
     createBoard(board);
     board[ox][column - 12] = " > ";
-    printBoard(board, 350);
+    printBoard(board, 150);
 
-    int O = ox;
-    int C = -1;
-    while (1)
+    int enemy = 0;
+    while (true)
     {
-        int random = e.generateRandom();
-        int c = 11;
+        if (enemy == 1)
+        {
+            enemy = 0;
+            checkInput(board, true);
+        }
+        else
+        {
+            checkInput(board, false);
+        }
 
+        enemy++;
+    }
+}
+void App::checkInput(string board[][column], bool flag)
+{
+
+    int r = e.generateRandom();
+    int O = 0;
+
+    for (int c = column - 1; c > 0; c--)
+    {
+        if (flag)
+        {
+            e.enemyStatus(r, board, c);
+        }
+
+        printBoard(board, 150);
         if (_kbhit())
         {
-
-            for (int i = 0; i < row; i++)
-            {
-                if (board[i][0] == " > ")
-                {
-                    O = i;
-                }
-            }
 
             switch (getch())
             {
@@ -176,13 +191,18 @@ void App::runGame()
                 h.heli_Status('d', board);
                 break;
             case 'w':
+                O = checkHeliPos(board);
 
                 for (int i = 1; i < column; i++)
                 {
-                    
+                    if (flag)
+                    {
+                        e.enemyStatus(r, board, c);
+                    }
+
                     s.shootStatus(O, board, i);
-                     e.enemyStatus(random, board, c);
-                    if (_kbhit()) 
+
+                    if (_kbhit())
                     {
                         switch (getch())
                         {
@@ -196,14 +216,13 @@ void App::runGame()
                         default:
                             break;
                         }
-                        
-                    
-
                     }
-                    
-                    
-                    printBoard(board, 50);
-                    --c;
+                    if (c != 1)
+                    {
+                        c--;
+                    }
+
+                    printBoard(board, 150);
                 }
 
                 break;
@@ -211,12 +230,19 @@ void App::runGame()
             default:
                 break;
             }
+        }
+    }
+}
+int App::checkHeliPos(string board[][column])
+{
 
-            printBoard(board, 100);
+    for (int i = 0; i < row; i++)
+    {
+        if (board[i][0] == " > ")
+        {
+            return i;
         }
     }
 }
 
 // -------------------------------------------------------
-
-

@@ -2,16 +2,17 @@
 
 int enemy::generateRandom() // tolid add tasadofi
 {
+
     srand((unsigned)time(NULL));
-    int random = rand() % column; // bein baze mishakhas
+    int random = rand() % row;
     return random;
 }
 
-void enemy::enemyStatus(int random, std::string board[][column], int down) 
+void enemy::enemyStatus(int random, std::string board[][column], int Left)
 {
-    for (size_t i =11 ; i> down; i--)
+    for (int i = column -1 ; i > Left; i--)
     {
         board[random][i] = "   ";
     }
-    board[random][down] = " @ ";
+    board[random][Left] = " @ ";
 }

@@ -15,13 +15,12 @@ using namespace std;
 #define row 9
 #define column 12
 
-class App :public helicopter
+class App : public helicopter
 {
 private:
     int speed = 500;
     unsigned int point = 0;
-    
-    
+
 public:
     shoot s;
     helicopter h;
@@ -29,16 +28,14 @@ public:
     App();
     void welcome() const;
     void help() const;
-    int  exec();
+    int exec();
     void lowercase(string &str);
     void clear() const;
     void delay(int ms);
     void runGame();
     void createBoard(string board[][column]);
-    void printBoard(string board[][column],int s);
+    void printBoard(string board[][column], int s);
     bool checkStatus(string board[][column], int OX);
+    void checkInput(string board[][column],bool flag);
+    int checkHeliPos(string board[][column]);
 };
-
-
-
-
