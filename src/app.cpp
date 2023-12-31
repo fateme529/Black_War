@@ -171,14 +171,18 @@ void App::checkInput(string board[][column], bool flag)
     int r = e.generateRandom();
     int O = 0;
 
-    for (int c = column - 1; c > 0; c--)
+    for (int c = column - 1; c >= 0; c--)
     {
         if (flag)
         {
             e.enemyStatus(r, board, c);
         }
-
-        printBoard(board, 150);
+        if (!checkGameOver(O, board))
+        {
+            printBoard(board, 150);
+            exit(1);
+        }
+        printBoard(board, 200);
         if (_kbhit())
         {
 
@@ -201,10 +205,6 @@ void App::checkInput(string board[][column], bool flag)
                     }
 
                     s.shootStatus(O, board, i);
-                        for (int i = 0; i < row; i++)
-    {
-       
-    }
 
                     if (_kbhit())
                     {
@@ -221,9 +221,14 @@ void App::checkInput(string board[][column], bool flag)
                             break;
                         }
                     }
-                    if (c != 1)
+                    if (c != 0)
                     {
                         c--;
+                    }
+                    if (!checkGameOver(O, board))
+                    {
+                        printBoard(board, 150);
+                        exit(1);
                     }
 
                     printBoard(board, 150);
@@ -250,3 +255,17 @@ int App::checkHeliPos(string board[][column])
 }
 
 // -------------------------------------------------------
+bool App::checkGameOver(int o, string board[][column])
+{
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+            if (board[i][j] == " > " && board[i][j + 1] == " @ ")
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}

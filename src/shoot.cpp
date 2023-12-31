@@ -8,12 +8,13 @@ void shoot::shootStatus(int X, std::string board[][column], int Right)
 
     for (int i = 1; i < Right; i++)
     {
+
         board[X][i] = "   ";
     }
     board[X][Right] = " * ";
-    
-     for(int i =0 ; i<row ; i++)
+
+    for (int i = 0; i < row; i++)
     {
-        board [i][11] = "   ";
+        board[i][11] = "   ";
     }
 }
