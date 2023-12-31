@@ -171,17 +171,23 @@ void App::checkInput(string board[][column], bool flag)
     int r = e.generateRandom();
     int O = 0;
 
-    for (int c = column - 1; c >= 0; c--)
+    for (int c = column - 1; c >= 0; c--) // chap enemy
     {
         if (flag)
         {
             e.enemyStatus(r, board, c);
         }
+     
         if (!checkGameOver(O, board))
         {
             printBoard(board, 150);
             exit(1);
         }
+           if (!hit(board))
+        {
+            ++point;
+        }
+
         printBoard(board, 200);
         if (_kbhit())
         {
@@ -197,7 +203,7 @@ void App::checkInput(string board[][column], bool flag)
             case 'w':
                 O = checkHeliPos(board);
 
-                for (int i = 1; i < column; i++)
+                for (int i = 1; i < column; i++) // chap shoot
                 {
                     if (flag)
                     {
@@ -225,10 +231,18 @@ void App::checkInput(string board[][column], bool flag)
                     {
                         c--;
                     }
+                
+
                     if (!checkGameOver(O, board))
                     {
+                        cout<< "game over"<<endl;
                         printBoard(board, 150);
                         exit(1);
+                    }
+                        if (!hit(board))
+                    {
+                        ++point;
+                            
                     }
 
                     printBoard(board, 150);
@@ -263,6 +277,24 @@ bool App::checkGameOver(int o, string board[][column])
         {
             if (board[i][j] == " > " && board[i][j + 1] == " @ ")
             {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+// -------------------------------------------------------
+bool App::hit(string board[][column])
+{
+
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+            if (board[i][j] == " * " && board[i][j + 1] == " @ ")
+            {
+
                 return false;
             }
         }
