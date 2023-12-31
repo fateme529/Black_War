@@ -201,6 +201,10 @@ void App::checkInput(string board[][column], bool flag)
                     }
 
                     s.shootStatus(O, board, i);
+                        for (int i = 0; i < row; i++)
+    {
+       
+    }
 
                     if (_kbhit())
                     {
