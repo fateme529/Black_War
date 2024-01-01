@@ -41,5 +41,5 @@ public:
     void checkInput(string board[][column], bool flag);
     int checkHeliPos(string board[][column]);
     bool checkGameOver(int o, string board[][column]);
-    bool hit( string board[][column]);
+    void hit( string board[][column]);
 };

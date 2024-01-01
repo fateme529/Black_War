@@ -177,17 +177,14 @@ void App::checkInput(string board[][column], bool flag)
         {
             e.enemyStatus(r, board, c);
         }
-     
+
         if (!checkGameOver(O, board))
         {
             printBoard(board, 150);
             exit(1);
         }
-           if (!hit(board))
-        {
-            ++point;
-        }
 
+        hit(board);
         printBoard(board, 200);
         if (_kbhit())
         {
@@ -205,13 +202,14 @@ void App::checkInput(string board[][column], bool flag)
 
                 for (int i = 1; i < column; i++) // chap shoot
                 {
+
                     if (flag)
                     {
                         e.enemyStatus(r, board, c);
                     }
 
                     s.shootStatus(O, board, i);
-
+                    
                     if (_kbhit())
                     {
                         switch (getch())
@@ -231,20 +229,14 @@ void App::checkInput(string board[][column], bool flag)
                     {
                         c--;
                     }
-                
 
                     if (!checkGameOver(O, board))
                     {
-                        cout<< "game over"<<endl;
+                        cout << "game over" << endl;
                         printBoard(board, 150);
                         exit(1);
                     }
-                        if (!hit(board))
-                    {
-                        ++point;
-                            
-                    }
-
+                    hit(board);
                     printBoard(board, 150);
                 }
 
@@ -277,6 +269,8 @@ bool App::checkGameOver(int o, string board[][column])
         {
             if (board[i][j] == " > " && board[i][j + 1] == " @ ")
             {
+                board[i][j] = " @ ";
+                board[i][j + 1] = "   ";
                 return false;
             }
         }
@@ -285,19 +279,25 @@ bool App::checkGameOver(int o, string board[][column])
 }
 
 // -------------------------------------------------------
-bool App::hit(string board[][column])
+void App::hit(string board[][column])
 {
 
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < column; j++)
         {
-            if (board[i][j] == " * " && board[i][j + 1] == " @ ")
+            if (board[i][j] == " * " && board[i][j + 1] == " @ " || board[i][j] == " @ " && board[i][j + 1] == " * ")
             {
+                
 
-                return false;
+                ++point;
+            }
+            if (board[i][j] == " * " && board[i][j + 2] == " @ " || board[i][j] == " @ " && board[i][j + 2] == " * ")
+            {
+                
+
+                ++point;
             }
         }
     }
-    return true;
 }
