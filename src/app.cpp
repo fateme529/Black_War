@@ -173,9 +173,17 @@ void App::checkInput(string board[][column], bool flag)
 
     for (int c = column - 1; c >= 0; c--) // chap enemy
     {
-        if (flag)
+
+        if (flag && !flag_s)
         {
             e.enemyStatus(r, board, c);
+        }
+        else if(flag_s)
+        {
+                destroy(board);
+                printBoard(board, 150);
+                
+            
         }
 
         if (!checkGameOver(O, board))
@@ -184,7 +192,10 @@ void App::checkInput(string board[][column], bool flag)
             exit(1);
         }
 
-        hit(board);
+        if (!hit(board))
+        {
+            flag_s = true;
+        }
         printBoard(board, 200);
         if (_kbhit())
         {
@@ -202,13 +213,24 @@ void App::checkInput(string board[][column], bool flag)
 
                 for (int i = 1; i < column; i++) // chap shoot
                 {
+   
 
-                    if (flag)
+                    if (flag&& !flag_s)
                     {
                         e.enemyStatus(r, board, c);
                     }
-
-                    s.shootStatus(O, board, i);
+                    if(!flag_s)
+                    {
+                        s.shootStatus(O, board, i);
+                    }
+                    else if(flag_s)
+                    {
+                            destroy(board);
+                            printBoard(board, 150);
+                            
+                            
+                        
+                    }
                     
                     if (_kbhit())
                     {
@@ -229,15 +251,19 @@ void App::checkInput(string board[][column], bool flag)
                     {
                         c--;
                     }
-
+                    
                     if (!checkGameOver(O, board))
                     {
                         cout << "game over" << endl;
                         printBoard(board, 150);
                         exit(1);
                     }
-                    hit(board);
+                    if (!hit(board))
+                    {
+                        flag_s =true;
+                    }
                     printBoard(board, 150);
+                    
                 }
 
                 break;
@@ -247,6 +273,7 @@ void App::checkInput(string board[][column], bool flag)
             }
         }
     }
+    flag_s = false;
 }
 int App::checkHeliPos(string board[][column])
 {
@@ -259,6 +286,27 @@ int App::checkHeliPos(string board[][column])
         }
     }
 }
+
+// -------------------------------------------------------
+void App::destroy(string board[][column])
+{
+
+       for (int i = 0; i < row; i++)
+    {
+        for (sigset_t j = 1; j <column; j++)
+        {
+            board[i][j]= "   ";
+        }
+        
+   
+    }
+}
+
+
+
+
+
+
 
 // -------------------------------------------------------
 bool App::checkGameOver(int o, string board[][column])
@@ -279,25 +327,20 @@ bool App::checkGameOver(int o, string board[][column])
 }
 
 // -------------------------------------------------------
-void App::hit(string board[][column])
+bool App::hit(string board[][column])
 {
 
     for (int i = 0; i < row; i++)
     {
         for (int j = 0; j < column; j++)
         {
-            if (board[i][j] == " * " && board[i][j + 1] == " @ " || board[i][j] == " @ " && board[i][j + 1] == " * ")
+            if (board[i][j] == " * " && board[i][j + 1] == " @ " || board[i][j] == " * " && board[i][j + 2] == " @ ")
             {
-                
-
                 ++point;
-            }
-            if (board[i][j] == " * " && board[i][j + 2] == " @ " || board[i][j] == " @ " && board[i][j + 2] == " * ")
-            {
-                
-
-                ++point;
+                return false;
             }
         }
     }
+    return true;
 }
+

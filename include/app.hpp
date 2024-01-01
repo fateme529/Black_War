@@ -20,6 +20,7 @@ class App : public helicopter
 private:
     int speed = 500;
     unsigned int point = 0;
+    bool flag_s= false;
     
     
 
@@ -41,5 +42,6 @@ public:
     void checkInput(string board[][column], bool flag);
     int checkHeliPos(string board[][column]);
     bool checkGameOver(int o, string board[][column]);
-    void hit( string board[][column]);
+    bool hit( string board[][column]);
+    void destroy(string board[][column]);
 };

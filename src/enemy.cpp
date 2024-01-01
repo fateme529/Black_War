@@ -23,6 +23,7 @@ void enemy::enemyStatus(int random, std::string board[][column], int Left)
         if (board[i][0] != " > ")
         {
             board[i][0] = "   ";
+           
         }
     }
 }
