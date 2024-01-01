@@ -1,16 +1,13 @@
 #pragma once
-#include <string>
-#include <time.h>
-#include <iostream>
-#include <stdlib.h>
 
-#define row 9
-#define column 12
+#include "barrier.hpp"
 
-class enemy
+class enemy : public barrier
 {
 private:
 public:
-    int generateRandom();
-    void enemyStatus(int random, std::string board[][column], int left);
+
+        int generateRandom() ;// tolid add tasadofi
+    
+        void enemyStatus(int random, std::string board[][column], int left);
 };

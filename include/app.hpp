@@ -44,4 +44,5 @@ public:
     bool checkGameOver(int o, string board[][column]);
     bool hit( string board[][column]);
     void destroy(string board[][column]);
+    void head(int o,string board[][column]);
 };

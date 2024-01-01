@@ -174,6 +174,7 @@ void App::checkInput(string board[][column], bool flag)
     for (int c = column - 1; c >= 0; c--) // chap enemy
     {
 
+  
         if (flag && !flag_s)
         {
             e.enemyStatus(r, board, c);
@@ -301,12 +302,6 @@ void App::destroy(string board[][column])
    
     }
 }
-
-
-
-
-
-
 
 // -------------------------------------------------------
 bool App::checkGameOver(int o, string board[][column])
