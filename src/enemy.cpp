@@ -6,13 +6,13 @@
  {
     int rand;
     rand = barrier::generateRandom();
-        if(rand ==0)
+        if(rand == 0)
     {
         ++rand;
     }
     if(rand == 8)
     {
-        generateRandom();
+        --rand;
     }
     return rand;
  }
@@ -23,16 +23,16 @@ void enemy::enemyStatus(int random, std::string board[][column], int Left)
     for (int i = column - 1; i > Left; i--)
     {
 
-        board[random+1][i] = "   ";
-        board[random-1][i] = "   ";
+         board[random+1][i] = "   ";
+         board[random-1][i] = "   ";
     }
-    if (Left % 2 == 0)
+    if (Left % 2 == 0&& Left!=0)
     {
-        board[random + 1][Left] = " @ ";
+        board[random + 1][Left] = " < ";
     }
-    else
+    else if(Left!=0)
     {
-        board[random -1][Left] = " @ ";
+        board[random -1][Left] = " < ";
 
     }
 

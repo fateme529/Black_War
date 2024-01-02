@@ -9,3 +9,9 @@ int barrier::generateRandom() // tolid add tasadofi
 
     return random;
 }
+
+
+void barrier:: barrierStatus(int random, std::string board[][column], int Left)
+{
+    
+}

@@ -15,5 +15,6 @@ class barrier
     private:
     public:
     int generateRandom();
+    void barrierStatus(int random, std::string board[][column], int Left);
     
 };

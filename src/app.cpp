@@ -177,7 +177,7 @@ void App::checkInput(string board[][column], bool flag)
   
         if (flag && !flag_s)
         {
-            e.enemyStatus(r, board, c);
+            e.enemyStatus(r, board, c); // c hamishe avalesh 11
         }
         else if(flag_s)
         {
@@ -286,6 +286,7 @@ int App::checkHeliPos(string board[][column])
             return i;
         }
     }
+    return 0;
 }
 
 // -------------------------------------------------------
@@ -310,9 +311,9 @@ bool App::checkGameOver(int o, string board[][column])
     {
         for (int j = 0; j < column; j++)
         {
-            if (board[i][j] == " > " && board[i][j + 1] == " @ ")
+            if (board[i][j] == " > " && board[i][j + 1] == " < ")
             {
-                board[i][j] = " @ ";
+                board[i][j] = " < ";
                 board[i][j + 1] = "   ";
                 return false;
             }
@@ -329,7 +330,7 @@ bool App::hit(string board[][column])
     {
         for (int j = 0; j < column; j++)
         {
-            if (board[i][j] == " * " && board[i][j + 1] == " @ " || board[i][j] == " * " && board[i][j + 2] == " @ ")
+            if (board[i][j] == " * " && board[i][j + 1] == " < " || board[i][j] == " * " && board[i][j + 2] == " < ")
             {
                 ++point;
                 return false;
