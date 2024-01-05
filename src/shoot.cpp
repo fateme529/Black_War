@@ -15,6 +15,6 @@ void shoot::shootStatus(int X, std::string board[][column], int Right)
 
     for (int i = 0; i < row; i++)
     {
-        board[i][11] = "   ";
+        board[i][column -1] = "   ";
     }
 }

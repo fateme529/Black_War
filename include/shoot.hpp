@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 
-#define row 9
-#define column 12
+#define row 12
+#define column 20
 
 class shoot
 {

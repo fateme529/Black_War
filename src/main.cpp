@@ -6,10 +6,15 @@ using namespace std;
 
 main()
 {
-    App app;
-    shoot shoot;
-    string board[row][column];
-    app.createBoard(board);
-    app.printBoard(board, 350);
-    app.runGame();
+        App app;
+    try
+    {
+        return app.exec();
+    }
+    catch (...)
+    {
+        return EXIT_FAILURE;
+    }
+
+    return 0;
 }

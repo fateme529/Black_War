@@ -4,8 +4,8 @@
 #include <iostream>
 #include <stdlib.h>
 
-#define row 9
-#define column 12
+#define row 12
+#define column 20
 
 
 

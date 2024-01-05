@@ -33,6 +33,7 @@ void App::help() const
     cout << "for start game enter :  S " << endl;
 }
 // -------------------------------------------------------
+
 int App::exec()
 {
     string command;
@@ -46,7 +47,7 @@ int App::exec()
 
             if (cin.eof() || command == "s")
             {
-                // runGame();
+                 runGame();
             }
             else if (command == "help")
             {
@@ -127,7 +128,7 @@ void App::printBoard(string board[][column], int s)
     system("cls");
     cout << "point : " << point << "\n"
          << endl;
-    cout << "+ ---------------------------------- +" << endl;
+    cout << "+ ---------------------------------------------------------- +" << endl;
     for (size_t i = 0; i < row; i++)
     {
         cout << "|";
@@ -138,66 +139,101 @@ void App::printBoard(string board[][column], int s)
         cout << "|";
         cout << endl;
     }
-    cout << "+ ---------------------------------- +" << endl;
+    cout << "+ ---------------------------------------------------------- +" << endl;
     delay(s);
 }
 // -------------------------------------------------------
 void App::runGame()
 {
+
+    int ww[column];
+    for (int i = 0; i < column; i++)
+    {
+        ww[i] = 0;
+    }
+
     string board[row][column];
     createBoard(board);
-    board[ox][column - 12] = " > ";
+    board[ox][0] = " > ";
     printBoard(board, 150);
 
-    int enemy = 0;
+    int enemy_r = e.generateRandom();
+    int wall_r_1 = e.generateRandom();
+    int wall_r_2 = e.generateRandom();
+
+    int enemy_o = 0;
+    int wall_o = 0;
+
+    bool wall_1 = false;
+    bool wall_2 = false;
+    bool enemy_1 = true;
+    bool fire_1 = false;
+
+    int fire_1_move = 1;
+    int enemy_1_move = column - 1;
+    int wall_1_move = column - 1;
+    int wall_2_move = column - 1;
+    bool wallhit = true;
+
     while (true)
     {
-        if (enemy == 1)
+        // ---------- shoot
+        if (fire_1 && fire_1_move < column && flag_s && wallhit)
         {
-            enemy = 0;
-            checkInput(board, true);
+            shootStatus(enemy_o, board, fire_1_move);
+            fire_1_move++;
         }
         else
         {
-            checkInput(board, false);
+            fire_1_move = 1;
+            fire_1 = false;
         }
-
-        enemy++;
-    }
-}
-void App::checkInput(string board[][column], bool flag)
-{
-
-    int r = e.generateRandom();
-    int O = 0;
-
-    for (int c = column - 1; c >= 0; c--) // chap enemy
-    {
-
-  
-        if (flag && !flag_s)
+        // ---------------- enemy
+        if (enemy_1 && enemy_1_move != -1 && flag_s)
         {
-            e.enemyStatus(r, board, c); // c hamishe avalesh 11
+            e.enemyStatus(enemy_r, board, enemy_1_move);
+            enemy_1_move--;
+            if (enemy_1_move == 5)
+            {
+                wall_1 = true;
+            }
+            if (enemy_1_move == 12)
+            {
+                wall_2 = true;
+            }
         }
-        else if(flag_s)
+        else
         {
-                destroy(board);
-                printBoard(board, 150);
-                
-            
+            enemy_r = e.generateRandom();
+            enemy_1_move = column - 1;
         }
+        // ------------------- wall 1
+        if (wall_1 && wall_1_move != -1)
+        {
+            b.barrierStatus(wall_r_1, board, wall_1_move);
+            wall_1_move--;
+        }
+        else
+        {
+            wall_r_1 = e.generateRandom();
+            wall_1_move = column - 1;
+            wall_1 = false;
+        }
+        // -----------------------
+        // ------------------- wall 2
+        if (wall_2 && wall_2_move != -1)
+        {
+            b.barrierStatus(wall_r_2, board, wall_2_move);
+            wall_2_move--;
+        }
+        else
+        {
+            wall_r_2 = e.generateRandom();
+            wall_2_move = column - 1;
+            wall_2 = false;
+        }
+        // -----------------------
 
-        if (!checkGameOver(O, board))
-        {
-            printBoard(board, 150);
-            exit(1);
-        }
-
-        if (!hit(board))
-        {
-            flag_s = true;
-        }
-        printBoard(board, 200);
         if (_kbhit())
         {
 
@@ -210,61 +246,11 @@ void App::checkInput(string board[][column], bool flag)
                 h.heli_Status('d', board);
                 break;
             case 'w':
-                O = checkHeliPos(board);
-
-                for (int i = 1; i < column; i++) // chap shoot
+                if (!fire_1)
                 {
-   
 
-                    if (flag&& !flag_s)
-                    {
-                        e.enemyStatus(r, board, c);
-                    }
-                    if(!flag_s)
-                    {
-                        s.shootStatus(O, board, i);
-                    }
-                    else if(flag_s)
-                    {
-                            destroy(board);
-                            printBoard(board, 150);
-                            
-                            
-                        
-                    }
-                    
-                    if (_kbhit())
-                    {
-                        switch (getch())
-                        {
-                        case 'a':
-                            h.heli_Status('a', board);
-                            break;
-                        case 'd':
-                            h.heli_Status('d', board);
-                            break;
-
-                        default:
-                            break;
-                        }
-                    }
-                    if (c != 0)
-                    {
-                        c--;
-                    }
-                    
-                    if (!checkGameOver(O, board))
-                    {
-                        cout << "game over" << endl;
-                        printBoard(board, 150);
-                        exit(1);
-                    }
-                    if (!hit(board))
-                    {
-                        flag_s =true;
-                    }
-                    printBoard(board, 150);
-                    
+                    fire_1 = true;
+                    enemy_o = checkHeliPos(board);
                 }
 
                 break;
@@ -273,9 +259,14 @@ void App::checkInput(string board[][column], bool flag)
                 break;
             }
         }
+        wallhit = wallHit(board);
+        flag_s = hit(board);
+        checkGameOver(checkHeliPos(board), board);
+        printBoard(board, 150);
     }
-    flag_s = false;
 }
+// ------------------------------------------------------
+
 int App::checkHeliPos(string board[][column])
 {
 
@@ -290,21 +281,7 @@ int App::checkHeliPos(string board[][column])
 }
 
 // -------------------------------------------------------
-void App::destroy(string board[][column])
-{
 
-       for (int i = 0; i < row; i++)
-    {
-        for (sigset_t j = 1; j <column; j++)
-        {
-            board[i][j]= "   ";
-        }
-        
-   
-    }
-}
-
-// -------------------------------------------------------
 bool App::checkGameOver(int o, string board[][column])
 {
     for (int i = 0; i < row; i++)
@@ -313,9 +290,17 @@ bool App::checkGameOver(int o, string board[][column])
         {
             if (board[i][j] == " > " && board[i][j + 1] == " < ")
             {
-                board[i][j] = " < ";
                 board[i][j + 1] = "   ";
-                return false;
+                board[i][j] = " < ";
+                printBoard(board, 100);
+                exit(1);
+            }
+            if (board[i][j] == " > " && board[i][j + 1] == " # ")
+            {
+                board[i][j + 1] = "   ";
+                board[i][j] = " # ";
+                printBoard(board, 100);
+                exit(1);
             }
         }
     }
@@ -330,8 +315,12 @@ bool App::hit(string board[][column])
     {
         for (int j = 0; j < column; j++)
         {
+
             if (board[i][j] == " * " && board[i][j + 1] == " < " || board[i][j] == " * " && board[i][j + 2] == " < ")
             {
+                board[i][j] = "   ";
+                board[i][j + 1] = "   ";
+                board[i][j + 2] = "   ";
                 ++point;
                 return false;
             }
@@ -339,4 +328,50 @@ bool App::hit(string board[][column])
     }
     return true;
 }
+// ------------------------------------------------------------
+int App::check_randoms(int wall_r, int enemy_r)
+{
+    if (wall_r == enemy_r)
+    {
+        wall_r += 2;
+        if (wall_r >= row)
+        {
+            wall_r -= 4;
+        }
+    }
+    else if (wall_r - 1 == enemy_r || wall_r + 1 == enemy_r)
+    {
+        wall_r += 1;
+        if (wall_r >= row)
+        {
+            wall_r -= 2;
+        }
+    }
+    else
+    {
+        return wall_r;
+    }
 
+    return wall_r;
+}
+// --------------------------------
+bool App::wallHit(string board[][column])
+{
+
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+
+            if (board[i][j] == " * " && board[i][j + 1] == " # " || board[i][j] == " * " && board[i][j + 2] == " # ")
+            {
+                // board[i][j] = " # ";
+                // board[i][j + 1] = "   ";
+                // board[i][j + 2] = "   ";
+
+                return false;
+            }
+        }
+    }
+    return true;
+}
