@@ -2,6 +2,7 @@
 #include "../include/heli.hpp"
 #include <time.h>
 using namespace std;
+ofstream MyFile("filename.txt", ios::app);
 
 // -------------------------------------------------------
 App::App()
@@ -47,7 +48,7 @@ int App::exec()
 
             if (cin.eof() || command == "s")
             {
-                 runGame();
+                runGame();
             }
             else if (command == "help")
             {
@@ -151,15 +152,14 @@ void App::runGame()
     {
         ww[i] = 0;
     }
-
     string board[row][column];
     createBoard(board);
     board[ox][0] = " > ";
     printBoard(board, 150);
 
-    int enemy_r = e.generateRandom();
-    int wall_r_1 = e.generateRandom();
-    int wall_r_2 = e.generateRandom();
+    enemy_r = e.generateRandom();
+    wall_r_1 = e.generateRandom();
+    wall_r_2 = e.generateRandom();
 
     int enemy_o = 0;
     int wall_o = 0;
@@ -170,9 +170,7 @@ void App::runGame()
     bool fire_1 = false;
 
     int fire_1_move = 1;
-    int enemy_1_move = column - 1;
-    int wall_1_move = column - 1;
-    int wall_2_move = column - 1;
+
     bool wallhit = true;
 
     while (true)
@@ -219,7 +217,7 @@ void App::runGame()
             wall_1_move = column - 1;
             wall_1 = false;
         }
-        // -----------------------
+
         // ------------------- wall 2
         if (wall_2 && wall_2_move != -1)
         {
@@ -299,7 +297,10 @@ bool App::checkGameOver(int o, string board[][column])
             {
                 board[i][j + 1] = "   ";
                 board[i][j] = " # ";
+
+                SaveGameData(MyFile,board);
                 printBoard(board, 100);
+                MyFile.close();
                 exit(1);
             }
         }
@@ -354,7 +355,7 @@ int App::check_randoms(int wall_r, int enemy_r)
 
     return wall_r;
 }
-// --------------------------------
+// -----------------------------------------------------------
 bool App::wallHit(string board[][column])
 {
 
@@ -375,3 +376,36 @@ bool App::wallHit(string board[][column])
     }
     return true;
 }
+//----------------------------------------------------------------
+void App::SaveGameData(ofstream &file, string board[][column])
+{
+    testopen(MyFile);
+    int heli_gh = checkHeliPos(board);
+    int enemy_r_gh = enemy_r;
+    int enemy_1_move_gh = enemy_1_move;
+    int wall_r_1_gh = wall_r_1;
+    int wall_r_2_gh = wall_r_2;
+    int wall_1_move_gh = wall_1_move;
+    int wall_2_move_gh = wall_2_move;
+
+     file<<left<<setw(30)<<point<<setw(30)<<heli_gh<<setw(30)<<enemy_1_move_gh<<setw(30)<<enemy_r_gh<<setw(30)<<wall_r_1_gh<<setw(30)<<wall_r_2_gh<<setw(30)<<wall_1_move_gh<<setw(30)<<wall_2_move_gh<<endl;
+}
+//-------------------------------------------------------------
+void App::testopen(ofstream &out) // write in file
+{
+    if (!out)
+    {
+        cerr << "Can not open the file!!!" << endl;
+        exit(EXIT_FAILURE);
+    }
+}
+//---------------------------------------------------------------
+void App::testopen(ifstream &out) // read in file
+{
+    if (!out)
+    {
+        cerr << "Can not open the file!!!" << endl;
+        exit(EXIT_FAILURE);
+    }
+}
+//--------------------------------------------
