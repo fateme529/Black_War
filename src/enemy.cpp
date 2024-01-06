@@ -1,6 +1,10 @@
 #include "../include/enemy.hpp"
 #include "../include/barrier.hpp"
-
+enemy::enemy()
+{
+    set_enemy_flag(true);
+    set_enemy_move(column - 1);
+}
 int enemy::generateRandom()
 {
     int rand;
@@ -9,7 +13,7 @@ int enemy::generateRandom()
     {
         ++rand;
     }
-    if (rand == 8)
+    if (rand == row - 1)
     {
         --rand;
     }
@@ -40,4 +44,29 @@ void enemy::enemyStatus(int random, std::string board[][column], int Left)
             board[i][0] = "   ";
         }
     }
+}
+
+void enemy::set_enemy_random()
+{
+    enemy_r = generateRandom();
+}
+int enemy::get_enemy_random()
+{
+    return enemy_r;
+}
+bool enemy::get_enemy_flag()
+{
+    return enemy_flag;
+}
+void enemy::set_enemy_flag(bool flag)
+{
+    enemy_flag = flag;
+}
+void enemy::set_enemy_move(int move)
+{
+    enemy_move = move;
+}
+int enemy::get_enemy_move()
+{
+    return enemy_move;
 }

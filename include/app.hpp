@@ -13,7 +13,7 @@
 #include "enemy.hpp"
 using namespace std;
 
-#define row 12
+#define row 10
 #define column 20
 
 class App : public helicopter
@@ -21,17 +21,17 @@ class App : public helicopter
 private:
     int speed = 500;
     unsigned int point = 0;
-    bool flag_s = false;
-    int enemy_r;
-    int enemy_1_move = column - 1;
+    bool flagEnemyHit = false;
+    bool flagWallHit = true;
 
 public:
     shoot s;
     helicopter h;
     enemy e;
-    barrier b;
+
     barrier barrier_1;
     barrier barrier_2;
+    enemy enemy_1;
     App();
     void welcome() const;
     void help() const;
@@ -46,7 +46,7 @@ public:
     void checkInput(string board[][column], bool flag);
     int checkHeliPos(string board[][column]);
     bool checkGameOver(int o, string board[][column]);
-    bool hit(string board[][column]);
+    bool enemyHit(string board[][column]);
     void head(int o, string board[][column]);
     int check_randoms(int wall_r, int enemy_r);
     int genrand();

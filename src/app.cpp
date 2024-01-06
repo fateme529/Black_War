@@ -147,63 +147,48 @@ void App::printBoard(string board[][column], int s)
 void App::runGame()
 {
 
-    int ww[column];
-    for (int i = 0; i < column; i++)
-    {
-        ww[i] = 0;
-    }
     string board[row][column];
     createBoard(board);
     board[ox][0] = " > ";
     printBoard(board, 150);
-
-    enemy_r = e.generateRandom();
-
-    int enemy_o = 0;
-
-    bool enemy_1 = true;
-    bool fire_1 = false;
-
-    int fire_1_move = 1;
-
-    bool wallhit = true;
+    int o = 0;
 
     while (true)
     {
         // ---------- shoot
-        if (fire_1 && fire_1_move < column && flag_s && wallhit)
+        if (s.get_fire_flag() && s.get_fire_move() < column && flagEnemyHit && flagWallHit)
         {
-            shootStatus(enemy_o, board, fire_1_move);
-            fire_1_move++;
+            shootStatus(o, board, s.get_fire_move());
+            s.set_fire_move(s.get_fire_move() + 1);
         }
         else
         {
-            fire_1_move = 1;
-            fire_1 = false;
+            s.set_fire_move(1);
+            s.set_fire_flag(false);
         }
         // ---------------- enemy
-        if (enemy_1 && enemy_1_move != -1 && flag_s)
+        if (e.get_enemy_flag() && e.get_enemy_move() != -1 && flagEnemyHit)
         {
-            e.enemyStatus(enemy_r, board, enemy_1_move);
-            enemy_1_move--;
-            if (enemy_1_move == 5)
+            e.enemyStatus(e.get_enemy_random(), board, e.get_enemy_move());
+            e.set_enemy_move(e.get_enemy_move() - 1);
+            if (e.get_enemy_move() == 5)
             {
-                barrier_2.set_flag_wall(true);
+                barrier_1.set_flag_wall(true);
             }
-            if (enemy_1_move == 12)
+            if (e.get_enemy_move() == 12)
             {
                 barrier_2.set_flag_wall(true);
             }
         }
         else
         {
-            enemy_r = e.generateRandom();
-            enemy_1_move = column - 1;
+            e.set_enemy_random();
+            e.set_enemy_move(column - 1);
         }
         // ------------------- wall 1
         if (barrier_1.get_flag_wall() && barrier_1.get_wall_move() != -1)
         {
-            b.barrierStatus(barrier_1.get_wall_r(), board, barrier_1.get_wall_move());
+            barrier_1.barrierStatus(barrier_1.get_wall_r(), board, barrier_1.get_wall_move());
             barrier_1.set_wall_move(barrier_1.get_wall_move() - 1);
         }
         else
@@ -216,7 +201,7 @@ void App::runGame()
         // ------------------- wall 2
         if (barrier_2.get_flag_wall() && barrier_2.get_wall_move() != -1)
         {
-            b.barrierStatus(barrier_2.get_wall_r(), board, barrier_2.get_wall_move());
+            barrier_2.barrierStatus(barrier_2.get_wall_r(), board, barrier_2.get_wall_move());
             barrier_2.set_wall_move(barrier_2.get_wall_move() - 1);
         }
         else
@@ -239,11 +224,10 @@ void App::runGame()
                 h.heli_Status('d', board);
                 break;
             case 'w':
-                if (!fire_1)
+                if (!s.get_fire_flag())
                 {
-
-                    fire_1 = true;
-                    enemy_o = checkHeliPos(board);
+                    s.set_fire_flag(true);
+                    o = checkHeliPos(board);
                 }
 
                 break;
@@ -252,8 +236,8 @@ void App::runGame()
                 break;
             }
         }
-        wallhit = wallHit(board);
-        flag_s = hit(board);
+        flagWallHit = wallHit(board);
+        flagEnemyHit = enemyHit(board);
         checkGameOver(checkHeliPos(board), board);
         printBoard(board, 150);
     }
@@ -295,7 +279,7 @@ bool App::checkGameOver(int o, string board[][column])
 
                 // SaveGameData(MyFile, board);
                 printBoard(board, 100);
-                MyFile.close();
+                // MyFile.close();
                 exit(1);
             }
         }
@@ -304,7 +288,7 @@ bool App::checkGameOver(int o, string board[][column])
 }
 
 // -------------------------------------------------------
-bool App::hit(string board[][column])
+bool App::enemyHit(string board[][column])
 {
 
     for (int i = 0; i < row; i++)
@@ -315,8 +299,15 @@ bool App::hit(string board[][column])
             if (board[i][j] == " * " && board[i][j + 1] == " < " || board[i][j] == " * " && board[i][j + 2] == " < ")
             {
                 board[i][j] = "   ";
-                board[i][j + 1] = "   ";
-                board[i][j + 2] = "   ";
+
+                if (board[i][j + 2] == " < ")
+                {
+                    board[i][j + 2] = "   ";
+                }
+                else
+                {
+                    board[i][j + 1] = "   ";
+                }
                 ++point;
                 return false;
             }
@@ -336,10 +327,6 @@ bool App::wallHit(string board[][column])
 
             if (board[i][j] == " * " && board[i][j + 1] == " # " || board[i][j] == " * " && board[i][j + 2] == " # ")
             {
-                // board[i][j] = " # ";
-                // board[i][j + 1] = "   ";
-                // board[i][j + 2] = "   ";
-
                 return false;
             }
         }
@@ -361,21 +348,21 @@ bool App::wallHit(string board[][column])
 //     file << left << setw(30) << point << setw(30) << heli_gh << setw(30) << enemy_1_move_gh << setw(30) << enemy_r_gh << setw(30) << wall_r_1_gh << setw(30) << wall_r_2_gh << setw(30) << wall_1_move_gh << setw(30) << wall_2_move_gh << endl;
 // }
 //-------------------------------------------------------------
-void App::testopen(ofstream &out) // write in file
-{
-    if (!out)
-    {
-        cerr << "Can not open the file!!!" << endl;
-        exit(EXIT_FAILURE);
-    }
-}
-//---------------------------------------------------------------
-void App::testopen(ifstream &out) // read in file
-{
-    if (!out)
-    {
-        cerr << "Can not open the file!!!" << endl;
-        exit(EXIT_FAILURE);
-    }
-}
+// void App::testopen(ofstream &out) // write in file
+// {
+//     if (!out)
+//     {
+//         cerr << "Can not open the file!!!" << endl;
+//         exit(EXIT_FAILURE);
+//     }
+// }
+// //---------------------------------------------------------------
+// void App::testopen(ifstream &out) // read in file
+// {
+//     if (!out)
+//     {
+//         cerr << "Can not open the file!!!" << endl;
+//         exit(EXIT_FAILURE);
+//     }
+// }
 //--------------------------------------------

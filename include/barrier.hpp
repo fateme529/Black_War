@@ -4,7 +4,7 @@
 #include <iostream>
 #include <stdlib.h>
 
-#define row 12
+#define row 10
 #define column 20
 
 class barrier
