@@ -16,7 +16,7 @@ private:
 
 public:
     barrier();
-    void set_wall_r();
+    void set_wall_r(int rand);
     int get_wall_r();
     void set_flag_wall(bool flag);
     bool get_flag_wall();

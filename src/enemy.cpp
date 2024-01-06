@@ -46,9 +46,9 @@ void enemy::enemyStatus(int random, std::string board[][column], int Left)
     }
 }
 
-void enemy::set_enemy_random()
+void enemy::set_enemy_random(int rand)
 {
-    enemy_r = generateRandom();
+    enemy_r = rand;
 }
 int enemy::get_enemy_random()
 {

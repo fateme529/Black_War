@@ -27,13 +27,13 @@ void barrier::barrierStatus(int random, std::string board[][column], int Left)
 }
 barrier::barrier()
 {
-    set_wall_r();
+    set_wall_r(generateRandom());
     set_flag_wall(false);
     set_wall_move(column - 1);
 }
-void barrier ::set_wall_r()
+void barrier ::set_wall_r(int rand)
 {
-    wall_r = generateRandom();
+    wall_r = rand;
 }
 int barrier::get_wall_r()
 {

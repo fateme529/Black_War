@@ -39,19 +39,20 @@ public:
     void lowercase(string &str);
     void clear() const;
     void delay(int ms);
-    void runGame();
+    void runGame(string board[][column], int o);
     void createBoard(string board[][column]);
     void printBoard(string board[][column], int s);
     bool checkStatus(string board[][column], int OX);
-    void checkInput(string board[][column], bool flag);
     int checkHeliPos(string board[][column]);
     bool checkGameOver(int o, string board[][column]);
     bool enemyHit(string board[][column]);
-    void head(int o, string board[][column]);
-    int check_randoms(int wall_r, int enemy_r);
-    int genrand();
     bool wallHit(string board[][column]);
-    // void SaveGameData(ofstream &file, string board[][column]); // mikham toye file benivisam
-    void testopen(ofstream &out);
-    void testopen(ifstream &out);
+    void saveStringArrayToFile(const string arr[][column], const string &filename);
+    void loadStringArrayFromFile(string arr[][column], const string &filename);
+
+    string board_m[row][column];
+    string board_l[row][column];
+
+    void saveIntToFile(int value, const std::string &filename);
+    int loadIntFromFile(const std::string &filename);
 };

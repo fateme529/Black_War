@@ -13,7 +13,7 @@ public:
         enemy();
         int generateRandom(); // tolid add tasadofi
         void enemyStatus(int random, std::string board[][column], int left);
-        void set_enemy_random();
+        void set_enemy_random(int rand);
         int get_enemy_random();
         void set_enemy_flag(bool flag);
         bool get_enemy_flag();
