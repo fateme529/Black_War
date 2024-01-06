@@ -158,14 +158,9 @@ void App::runGame()
     printBoard(board, 150);
 
     enemy_r = e.generateRandom();
-    wall_r_1 = e.generateRandom();
-    wall_r_2 = e.generateRandom();
 
     int enemy_o = 0;
-    int wall_o = 0;
 
-    bool wall_1 = false;
-    bool wall_2 = false;
     bool enemy_1 = true;
     bool fire_1 = false;
 
@@ -193,11 +188,11 @@ void App::runGame()
             enemy_1_move--;
             if (enemy_1_move == 5)
             {
-                wall_1 = true;
+                barrier_2.set_flag_wall(true);
             }
             if (enemy_1_move == 12)
             {
-                wall_2 = true;
+                barrier_2.set_flag_wall(true);
             }
         }
         else
@@ -206,29 +201,29 @@ void App::runGame()
             enemy_1_move = column - 1;
         }
         // ------------------- wall 1
-        if (wall_1 && wall_1_move != -1)
+        if (barrier_1.get_flag_wall() && barrier_1.get_wall_move() != -1)
         {
-            b.barrierStatus(wall_r_1, board, wall_1_move);
-            wall_1_move--;
+            b.barrierStatus(barrier_1.get_wall_r(), board, barrier_1.get_wall_move());
+            barrier_1.set_wall_move(barrier_1.get_wall_move() - 1);
         }
         else
         {
-            wall_r_1 = e.generateRandom();
-            wall_1_move = column - 1;
-            wall_1 = false;
+            barrier_1.set_wall_r();
+            barrier_1.set_wall_move(column - 1);
+            barrier_1.set_flag_wall(false);
         }
 
         // ------------------- wall 2
-        if (wall_2 && wall_2_move != -1)
+        if (barrier_2.get_flag_wall() && barrier_2.get_wall_move() != -1)
         {
-            b.barrierStatus(wall_r_2, board, wall_2_move);
-            wall_2_move--;
+            b.barrierStatus(barrier_2.get_wall_r(), board, barrier_2.get_wall_move());
+            barrier_2.set_wall_move(barrier_2.get_wall_move() - 1);
         }
         else
         {
-            wall_r_2 = e.generateRandom();
-            wall_2_move = column - 1;
-            wall_2 = false;
+            barrier_2.set_wall_r();
+            barrier_2.set_wall_move(column - 1);
+            barrier_2.set_flag_wall(false);
         }
         // -----------------------
 
@@ -298,7 +293,7 @@ bool App::checkGameOver(int o, string board[][column])
                 board[i][j + 1] = "   ";
                 board[i][j] = " # ";
 
-                SaveGameData(MyFile,board);
+                // SaveGameData(MyFile, board);
                 printBoard(board, 100);
                 MyFile.close();
                 exit(1);
@@ -330,32 +325,7 @@ bool App::hit(string board[][column])
     return true;
 }
 // ------------------------------------------------------------
-int App::check_randoms(int wall_r, int enemy_r)
-{
-    if (wall_r == enemy_r)
-    {
-        wall_r += 2;
-        if (wall_r >= row)
-        {
-            wall_r -= 4;
-        }
-    }
-    else if (wall_r - 1 == enemy_r || wall_r + 1 == enemy_r)
-    {
-        wall_r += 1;
-        if (wall_r >= row)
-        {
-            wall_r -= 2;
-        }
-    }
-    else
-    {
-        return wall_r;
-    }
 
-    return wall_r;
-}
-// -----------------------------------------------------------
 bool App::wallHit(string board[][column])
 {
 
@@ -377,19 +347,19 @@ bool App::wallHit(string board[][column])
     return true;
 }
 //----------------------------------------------------------------
-void App::SaveGameData(ofstream &file, string board[][column])
-{
-    testopen(MyFile);
-    int heli_gh = checkHeliPos(board);
-    int enemy_r_gh = enemy_r;
-    int enemy_1_move_gh = enemy_1_move;
-    int wall_r_1_gh = wall_r_1;
-    int wall_r_2_gh = wall_r_2;
-    int wall_1_move_gh = wall_1_move;
-    int wall_2_move_gh = wall_2_move;
+// void App::SaveGameData(ofstream &file, string board[][column])
+// {
+//     testopen(MyFile);
+//     int heli_gh = checkHeliPos(board);
+//     int enemy_r_gh = enemy_r;
+//     int enemy_1_move_gh = enemy_1_move;
+//     int wall_r_1_gh = wall_r_1;
+//     int wall_r_2_gh = wall_r_2;
+//     int wall_1_move_gh = wall_1_move;
+//     int wall_2_move_gh = wall_2_move;
 
-     file<<left<<setw(30)<<point<<setw(30)<<heli_gh<<setw(30)<<enemy_1_move_gh<<setw(30)<<enemy_r_gh<<setw(30)<<wall_r_1_gh<<setw(30)<<wall_r_2_gh<<setw(30)<<wall_1_move_gh<<setw(30)<<wall_2_move_gh<<endl;
-}
+//     file << left << setw(30) << point << setw(30) << heli_gh << setw(30) << enemy_1_move_gh << setw(30) << enemy_r_gh << setw(30) << wall_r_1_gh << setw(30) << wall_r_2_gh << setw(30) << wall_1_move_gh << setw(30) << wall_2_move_gh << endl;
+// }
 //-------------------------------------------------------------
 void App::testopen(ofstream &out) // write in file
 {

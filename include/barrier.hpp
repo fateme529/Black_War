@@ -7,14 +7,22 @@
 #define row 12
 #define column 20
 
-
-
-
 class barrier
 {
-    private:
-    public:
+private:
+    int wall_r;
+    bool wall;
+    int wall_move;
+
+public:
+    barrier();
+    void set_wall_r();
+    int get_wall_r();
+    void set_flag_wall(bool flag);
+    bool get_flag_wall();
+    void set_wall_move(int move);
+    int get_wall_move();
+
     int generateRandom();
     void barrierStatus(int random, std::string board[][column], int Left);
-    
 };

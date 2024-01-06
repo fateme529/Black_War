@@ -8,7 +8,6 @@
 #include <conio.h>
 #include <fstream>
 
-
 #include "heli.hpp"
 #include "shoot.hpp"
 #include "enemy.hpp"
@@ -24,17 +23,15 @@ private:
     unsigned int point = 0;
     bool flag_s = false;
     int enemy_r;
-    int wall_r_1;
-    int wall_r_2;
     int enemy_1_move = column - 1;
-    int wall_1_move = column - 1;
-    int wall_2_move = column - 1;
 
 public:
     shoot s;
     helicopter h;
     enemy e;
-    barrier b; 
+    barrier b;
+    barrier barrier_1;
+    barrier barrier_2;
     App();
     void welcome() const;
     void help() const;
@@ -54,7 +51,7 @@ public:
     int check_randoms(int wall_r, int enemy_r);
     int genrand();
     bool wallHit(string board[][column]);
-    void SaveGameData(ofstream &file, string board[][column]); // mikham toye file benivisam
+    // void SaveGameData(ofstream &file, string board[][column]); // mikham toye file benivisam
     void testopen(ofstream &out);
-     void testopen(ifstream &out);
+    void testopen(ifstream &out);
 };
